@@ -1,0 +1,40 @@
+﻿@page
+@model MarketPlace.Web.Pages.Profile.IndexModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<h2>My Profile</h2>
+
+<div>
+    <p><strong>Email:</strong> @Model.UserInfo.Email</p>
+    <p><strong>Display Name:</strong> @Model.UserInfo.DisplayName</p>
+</div>
+
+<a class="btn btn-primary" asp-page="Edit">Edit Profile</a>
+
+<hr />
+
+<h3>My Products</h3>
+@if (Model.Products.Any())
+{
+    <ul>
+        @foreach (var product in Model.Products)
+        {
+            <div class="product-card">
+                <h4>@product.Name</h4>
+                <p>@product.Description</p>
+                <p>@product.Price.ToString("C")</p>
+                <a asp-page="/Products/Upsert" asp-route-id="@product.Id" class="btn btn-primary">Edit</a>
+            </div>
+        }
+    </ul>
+}
+else
+{
+    <p>You haven’t added any products yet.</p>
+}
+
+<form asp-area="Identity" asp-page="/Account/Logout" method="post">
+    <button type="submit" class="btn btn-danger">Logout</button>
+</form>

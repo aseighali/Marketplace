@@ -1,0 +1,17 @@
+﻿@page "{id?}"
+@model MarketPlace.Web.Pages.Categories.UpsertModel
+
+<h2>@(Model.Category.Id == Guid.Empty ? "Create Category" : "Edit Category")</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Category.Name"></label>
+        <input asp-for="Category.Name" class="form-control" />
+        <span asp-validation-for="Category.Name" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        @(Model.Category.Id == Guid.Empty ? "Create" : "Update")
+    </button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>

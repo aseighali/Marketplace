@@ -1,0 +1,32 @@
+﻿@page
+@model MarketPlace.Web.Pages.Categories.IndexModel
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<h1>Categories</h1>
+
+<a asp-page="upsert" class="btn btn-primary mb-3">Create New Category</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model.Categories)
+        {
+            <tr>
+                <td>@category.Name</td>
+                <td>
+                    <a asp-page="upsert" asp-route-id="@category.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@category.Id" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

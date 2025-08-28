@@ -1,0 +1,29 @@
+﻿@page
+@model MarketPlace.Web.Pages.Users.UsersModel
+@{
+    ViewData["Title"] = "Users";
+}
+
+<h2>Manage Users</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.Roles</td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@user.Id" class="btn btn-sm btn-primary">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

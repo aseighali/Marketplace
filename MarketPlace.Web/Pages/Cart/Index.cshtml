@@ -1,0 +1,40 @@
+﻿@page
+@model MarketPlace.Web.Pages.Cart.IndexModel
+
+<h2>Your Cart</h2>
+
+@if (Model.Cart.Items.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Cart.Items)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>
+                        <form method="post" asp-page-handler="Remove" asp-route-id="@item.ProductId">
+                            <button class="btn btn-danger btn-sm">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <form method="post" asp-page-handler="Clear">
+        <button class="btn btn-warning">Clear Cart</button>
+    </form>
+}
+else
+{
+    <p>Your cart is empty.</p>
+}
