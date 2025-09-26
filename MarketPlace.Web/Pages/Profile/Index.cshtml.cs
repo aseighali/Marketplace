@@ -16,7 +16,7 @@ namespace MarketPlace.Web.Pages.Profile
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IProductService _productService;
 
-        public UserInfoModel UserInfo { get; set; } = new();
+        public UserInfoDto UserInfo { get; set; } = new();
         public IEnumerable<ProductDto> Products { get; set; } = new List<ProductDto>();
 
         public IndexModel(UserManager<ApplicationUser> userManager, IProductService productService)
@@ -30,7 +30,7 @@ namespace MarketPlace.Web.Pages.Profile
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return;
 
-            UserInfo = new UserInfoModel
+            UserInfo = new UserInfoDto
             {
                 Email = user.Email!,
                 DisplayName = user.DisplayName
@@ -49,10 +49,5 @@ namespace MarketPlace.Web.Pages.Profile
 
         }
 
-        public class UserInfoModel
-        {
-            public string Email { get; set; } = string.Empty;
-            public string? DisplayName { get; set; }
-        }
     }
 }

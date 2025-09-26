@@ -1,3 +1,4 @@
+using MarketPlace.Application.DTOs;
 using MarketPlace.Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,7 +20,7 @@ namespace MarketPlace.Web.Pages.Users
         }
 
         [BindProperty]
-        public EditUserViewModel Input { get; set; } = new();
+        public EditUserRequest Input { get; set; } = new();
 
         public List<string> AllRoles { get; set; } = new();
 
@@ -30,7 +31,7 @@ namespace MarketPlace.Web.Pages.Users
 
             var roles = await _userManager.GetRolesAsync(user);
 
-            Input = new EditUserViewModel
+            Input = new EditUserRequest
             {
                 Id = user.Id,
                 Email = user.Email!,
@@ -61,12 +62,5 @@ namespace MarketPlace.Web.Pages.Users
             return RedirectToPage("/Users/Index");
         }
 
-        public class EditUserViewModel
-        {
-            public string Id { get; set; } = string.Empty;
-            public string Email { get; set; } = string.Empty;
-            public string DisplayName { get; set; } = string.Empty;
-            public string Role { get; set; } = "User";
-        }
     }
 }

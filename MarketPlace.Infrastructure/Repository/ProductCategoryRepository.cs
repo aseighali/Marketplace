@@ -40,7 +40,7 @@ namespace MarketPlace.Infrastructure.Repository
 
         public async Task UpdateAsync(ProductCategory category)
         {
-            await UpdateAsync(category);
+            _context.Update(category);
             await _context.SaveChangesAsync();
         }
     }

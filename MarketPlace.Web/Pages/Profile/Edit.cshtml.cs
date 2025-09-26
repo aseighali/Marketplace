@@ -1,3 +1,4 @@
+using MarketPlace.Application.DTOs;
 using MarketPlace.Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,7 +13,7 @@ namespace MarketPlace.Web.Pages.Profile
         private readonly UserManager<ApplicationUser> _userManager;
 
         [BindProperty]
-        public InputModel Input { get; set; } = new();
+        public ProfileEditRequest Input { get; set; } = new();
 
         public EditModel(UserManager<ApplicationUser> userManager)
         {
@@ -24,7 +25,7 @@ namespace MarketPlace.Web.Pages.Profile
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return NotFound();
 
-            Input = new InputModel
+            Input = new ProfileEditRequest
             {
                 DisplayName = user.DisplayName
             };
@@ -45,9 +46,5 @@ namespace MarketPlace.Web.Pages.Profile
             return RedirectToPage("Index");
         }
 
-        public class InputModel
-        {
-            public string? DisplayName { get; set; }
-        }
     }
 }

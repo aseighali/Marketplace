@@ -23,20 +23,20 @@ namespace MarketPlace.Infrastructure.Repository
             return await _context.Products.Include(z => z.Category).ToListAsync();//as no tracking???
         }
 
-        public async Task<IEnumerable<Product>> GetByCategoryAsync(Guid categoryId)//as no tracking???
-        {
-            return await _context.Products.Include(z => z.Category).Where(z => z.CategoryId == categoryId).ToListAsync();
-        }
+            public async Task<IEnumerable<Product>> GetByCategoryAsync(Guid categoryId)//as no tracking???
+            {
+                return await _context.Products.Include(z => z.Category).Where(z => z.CategoryId == categoryId).ToListAsync();
+            }
 
-        public async Task<Product?> GetByIdAsync(Guid id)//as no tracking???
-        {
-            return await _context.Products.Include(z => z.Category).FirstOrDefaultAsync(p => p.Id == id);
-        }
+            public async Task<Product?> GetByIdAsync(Guid id)//as no tracking???
+            {
+                return await _context.Products.Include(z => z.Category).FirstOrDefaultAsync(p => p.Id == id);
+            }
 
-        public async Task<IEnumerable<Product>> GetBySellerIdAsync(string id)
-        {
-            return await _context.Products.Include(z => z.Category).Where(z => z.SellerId == id).ToListAsync();
-        }
+            public async Task<IEnumerable<Product>> GetBySellerIdAsync(string id)
+            {
+                return await _context.Products.Include(z => z.Category).Where(z => z.SellerId == id).ToListAsync();
+            }
 
         public async Task UpdateAsync(Product product)
         {

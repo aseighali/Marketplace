@@ -1,3 +1,4 @@
+using MarketPlace.Application.DTOs;
 using MarketPlace.Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,7 +13,7 @@ namespace MarketPlace.Web.Pages.Users
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public List<UserViewModel> Users { get; set; } = new();
+        public List<UserDto> Users { get; set; } = new();
 
         public UsersModel(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
@@ -26,7 +27,7 @@ namespace MarketPlace.Web.Pages.Users
             foreach (var user in users)
             {
                 var roles = await _userManager.GetRolesAsync(user);
-                Users.Add(new UserViewModel
+                Users.Add(new UserDto
                 {
                     Id = user.Id,
                     Email = user.Email!,
@@ -35,11 +36,5 @@ namespace MarketPlace.Web.Pages.Users
             }
         }
 
-        public class UserViewModel
-        {
-            public string Id { get; set; }
-            public string Email { get; set; }
-            public string Roles { get; set; }
-        }
     }
 }

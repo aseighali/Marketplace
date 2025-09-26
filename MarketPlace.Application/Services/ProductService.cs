@@ -9,11 +9,11 @@ namespace MarketPlace.Application.Services
     {
         private readonly IProductCategoryRepository _categoryRepo;
         private readonly IProductRepository _productRepo;
+        
         public ProductService(IProductCategoryRepository productCategoryRepo, IProductRepository productRepository)
         {
             _categoryRepo = productCategoryRepo;
             _productRepo = productRepository;
-
         }
         public async Task<Result<ProductDto>> GetProductByIdAsync(Guid id)
         {
@@ -37,7 +37,6 @@ namespace MarketPlace.Application.Services
             {
                 product = new Product(request.Name, request.Price, request.CategoryId, request.SellerId, request.Description);
                 await _productRepo.AddAsync(product);
-
             }
             catch (Exception ex)
             {

@@ -25,7 +25,7 @@ namespace MarketPlace.Domain.Entities
 
         public void Update(string name)
         {
-            if(string.IsNullOrEmpty(Name)) throw new ArgumentNullException("Name is required.", nameof(name));
+            if(string.IsNullOrEmpty(name)) throw new ArgumentNullException("Name is required.", nameof(name));
 
             Name = name;
         }
