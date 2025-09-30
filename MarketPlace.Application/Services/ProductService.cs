@@ -2,7 +2,6 @@
 using MarketPlace.Application.DTOs;
 using MarketPlace.Application.Interfaces;
 using MarketPlace.Domain.Entities;
-using MarketPlace.Infrastructure.Repository;
 
 namespace MarketPlace.Application.Services
 {

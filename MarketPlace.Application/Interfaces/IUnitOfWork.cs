@@ -1,4 +1,4 @@
-namespace MarketPlace.Infrastructure.Repository
+namespace MarketPlace.Application.Interfaces
 {
     public interface IUnitOfWork
     {
