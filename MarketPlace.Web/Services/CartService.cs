@@ -15,9 +15,9 @@ namespace MarketPlace.Web.Services
 
         private ISession Session => _httpContextAccessor.HttpContext!.Session;
 
-        public Cart GetCart()
+        public CartDTO GetCart()
         {
-            return Session.GetObject<Cart>(CartKey) ?? new Cart();
+            return Session.GetObject<CartDTO>(CartKey) ?? new CartDTO();
         }
 
         public void AddToCart(CartItem item)

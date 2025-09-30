@@ -1,11 +1,6 @@
-﻿using MarketPlace.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MarketPlace.Domain.Entities;
 
-namespace MarketPlace.Application.Interfaces
+namespace MarketPlace.Infrastructure.Repository
 {
     public interface IProductCategoryRepository
     {
@@ -13,6 +8,5 @@ namespace MarketPlace.Application.Interfaces
         Task<IEnumerable<ProductCategory>> GetAllAsync();
         Task AddAsync(ProductCategory category);
         Task UpdateAsync(ProductCategory category);
-        /*Task ArchiveAsync(Guid id);*/
     }
 }

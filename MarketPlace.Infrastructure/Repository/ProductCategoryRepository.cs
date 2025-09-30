@@ -1,5 +1,4 @@
-﻿using MarketPlace.Application.Interfaces;
-using MarketPlace.Domain.Entities;
+﻿using MarketPlace.Domain.Entities;
 using MarketPlace.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +14,6 @@ namespace MarketPlace.Infrastructure.Repository
         public async Task AddAsync(ProductCategory category)
         {
             await _context.ProductCategories.AddAsync(category);
-            await _context.SaveChangesAsync();
         }
 
         /*public async Task ArchiveAsync(Guid id)
@@ -41,7 +39,6 @@ namespace MarketPlace.Infrastructure.Repository
         public async Task UpdateAsync(ProductCategory category)
         {
             _context.Update(category);
-            await _context.SaveChangesAsync();
         }
     }
 }

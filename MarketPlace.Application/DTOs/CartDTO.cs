@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MarketPlace.Application.DTOs
 {
 
-    public class Cart
+    public class CartDTO
     {
         public List<CartItem> Items { get; set; } = new();
     }

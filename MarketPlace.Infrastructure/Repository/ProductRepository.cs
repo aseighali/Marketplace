@@ -1,5 +1,4 @@
-﻿using MarketPlace.Application.Interfaces;
-using MarketPlace.Domain.Entities;
+﻿using MarketPlace.Domain.Entities;
 using MarketPlace.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +14,6 @@ namespace MarketPlace.Infrastructure.Repository
         public async Task AddAsync(Product product)
         {
             await _context.Products.AddAsync(product);
-            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Product>> GetAllAsync()
@@ -41,7 +39,6 @@ namespace MarketPlace.Infrastructure.Repository
         public async Task UpdateAsync(Product product)
         {
             _context.Update(product);
-            await _context.SaveChangesAsync();
         }
     }
 }

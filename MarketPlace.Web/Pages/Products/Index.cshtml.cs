@@ -16,7 +16,7 @@ namespace MarketPlace.Web.Pages.Products
             _productService = productService;
         }
         public IEnumerable<ProductDto> Products { get; set; } = new List<ProductDto>();
-        public Application.DTOs.Cart Cart { get; set; } = new();
+        public Application.DTOs.CartDTO Cart { get; set; } = new();
 
         public async Task OnGetAsync()
         {

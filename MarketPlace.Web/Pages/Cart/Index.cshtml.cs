@@ -9,7 +9,7 @@ namespace MarketPlace.Web.Pages.Cart
     {
         private readonly CartService _cartService;
 
-        public Application.DTOs.Cart Cart { get; set; } = new();
+        public Application.DTOs.CartDTO Cart { get; set; } = new();
 
         public IndexModel(CartService cartService)
         {
