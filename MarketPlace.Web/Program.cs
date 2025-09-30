@@ -1,20 +1,30 @@
-using MarketPlace.Application.DependencyInjection;
-using MarketPlace.Infrastructure.DependencyInjection;
+using MarketPlace.Application.Interfaces;
+using MarketPlace.Application.Services;
+using MarketPlace.Infrastructure.Data;
 using MarketPlace.Infrastructure.Entities;
+using MarketPlace.Infrastructure.Repository.UnitOfWork;
 using MarketPlace.Web.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add Infrastructure Services (DbContext, Identity, Repositories)
-builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddDbContext<MarketPlaceAppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add Application Services
-builder.Services.AddApplicationServices();
-
-// Web-specific services
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequiredLength = 8;
+}).AddEntityFrameworkStores<MarketPlaceAppDbContext>().AddDefaultTokenProviders().AddRoles<IdentityRole>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -55,8 +65,11 @@ app.UseSession();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-// Ensure database is created and migrated
-await app.Services.EnsureDatabaseCreatedAsync();
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<MarketPlaceAppDbContext>();
+    db.Database.Migrate();
+}
 
 app.MapRazorPages();
 
