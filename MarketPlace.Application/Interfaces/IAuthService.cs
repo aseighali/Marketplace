@@ -13,5 +13,20 @@ namespace MarketPlace.Application.Interfaces
         Task<Result<bool>> ChangePasswordAsync(string userId, string currentPassword, string newPassword);
         Task<Result<bool>> DeleteUserAsync(string userId);
         Task<Result<List<ApplicationUser>>> GetAllUsersAsync();
+        Task<StandarResult> CreateRefreshTokenForUser(Guid refreshToken, DateTime addDays, int userId);
+        Task<Result<ApplicationUser>> GetUserByRefreshToken(string refreshtoken);
+        Task<bool> IsRefresghTokenValid(string refreshtoken);
+    }
+
+
+    public class StandarResult
+    {
+        public bool IsSuccess { get; set; }
+
+        public string Message { get; set; }
+
+        public bool HasError { get; set; }
+
+        public List<string> Erros { get; set; }
     }
 }

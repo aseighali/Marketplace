@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace MarketPlace.Web.Pages.Products
 {
-    [Authorize]
+    [Authorize(Roles="admin")]
     public class UpsertModel : PageModel
     {
         private readonly IProductService _productService;

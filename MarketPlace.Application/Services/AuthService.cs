@@ -225,5 +225,35 @@ namespace MarketPlace.Application.Services
                 return Result<List<ApplicationUser>>.FailureResult($"Failed to get users: {ex.Message}");
             }
         }
+
+        public Task<StandarResult> CreateRefreshTokenForUser(Guid refreshToken, DateTime addDays, int userId)
+        {
+            //add this to database
+            throw new NotImplementedException();
+
+
+            //return success
+        }
+
+        public Task<Result<ApplicationUser>> GetUserByRefreshToken(string refreshtoken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsRefresghTokenValid(string refreshtoken)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public class RefershToken
+        {
+            public int UserId { get; set; }
+            public Guid Token { get; set; }
+            public DateTime ExpireTime { get; set; }
+            public DateTime CreationTime { get; set; }
+
+            public int UsedCount { get; set; }
+        }
     }
 }

@@ -1,6 +1,7 @@
 using MarketPlace.Application.Interfaces;
 using MarketPlace.Application.DTOs;
 using MarketPlace.Domain.Entities;
+using Azure;
 
 namespace MarketPlace.Web.Services
 {
@@ -153,6 +154,42 @@ namespace MarketPlace.Web.Services
                 },
                 Message = "Profile updated successfully"
             };
+        }
+
+        /// <summary>
+        /// call it after succesfull login
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task SetRefreshToken(int userId)
+        {
+            var refreshToken = Guid.NewGuid();
+            var result = _authService.CreateRefreshTokenForUser(refreshToken, DateTime.Now.AddDays(1), userId);
+
+            _httpContextAccessor.HttpContext.Response.Cookies.Append("X-refreshToken", refreshToken.ToString(), new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Lax,
+                Expires = DateTime.UtcNow.AddMonths(1),
+                Secure = true,
+
+                //TODO: enable the domain
+                Domain = ".domain.com",
+            });
+        }
+        public async Task<string> RenewRefreshToken()
+        {
+            string refreshtoken = _httpContextAccessor.HttpContext.Request.Headers["X-RefreshToken"];
+
+            var user = _authService.GetUserByRefreshToken(refreshtoken);
+
+
+            if (await _authService.IsRefresghTokenValid(refreshtoken))
+            {
+                //create and return new jwt
+            }
+
+            throw new NotImplementedException();
         }
     }
 }
