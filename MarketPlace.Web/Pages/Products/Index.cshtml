@@ -1,9 +1,10 @@
 ﻿@page
 @model MarketPlace.Web.Pages.Products.IndexModel
+@using MarketPlace.Web.Extensions
+@using MarketPlace.Domain.Constants
 @{
     ViewData["Title"] = "Products";
-    var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
+    var currentUserId = User.GetUserId();
 }
 
 <h1>Products</h1>
@@ -28,7 +29,7 @@
                 <td>@product.Price.ToString("C")</td>
                 <td>@product.CategoryName</td>
                 <td>
-                    @if (User.IsInRole("Admin") || product.SellerId == currentUserId)
+                    @if (User.GetUserRole() == UserRoles.Admin || product.SellerId == currentUserId)
                     {
                         <a asp-page="/Products/Upsert" asp-route-id="@product.Id" class="btn btn-primary">Edit</a>
                         <form asp-page-handler="Delete" method="post" asp-route-id="@product.Id" style="display:inline;">

@@ -1,42 +1,48 @@
-using MarketPlace.Application.Common;
 using MarketPlace.Application.DTOs;
 using MarketPlace.Application.Interfaces;
-using MarketPlace.Domain.Entities;
-using MarketPlace.Infrastructure.Entities;
+using MarketPlace.Web.Extensions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.Web.Pages.Profile
 {
     [Authorize]
     public class IndexModel : PageModel
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAuthService _authService;
         private readonly IProductService _productService;
 
         public UserInfoDto UserInfo { get; set; } = new();
         public IEnumerable<ProductDto> Products { get; set; } = new List<ProductDto>();
 
-        public IndexModel(UserManager<ApplicationUser> userManager, IProductService productService)
+        public IndexModel(IAuthService authService, IProductService productService)
         {
-            _userManager = userManager;
+            _authService = authService;
             _productService = productService;
         }
 
         public async Task OnGetAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return;
+            var userId = User.GetUserId();
+            if (string.IsNullOrEmpty(userId)) return;
 
+            var userResult = await _authService.GetUserByIdAsync(userId);
+            if (!userResult.IsSuccess) return;
+
+            var user = userResult.Value;
             UserInfo = new UserInfoDto
             {
-                Email = user.Email!,
-                DisplayName = user.DisplayName
+                Id = user.Id,
+                Email = user.Email,
+                DisplayName = user.DisplayName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Role = user.Role,
+                CreatedAt = user.CreatedAt,
+                LastLoginAt = user.LastLoginAt
             };
 
-            var result = await _productService.GetAllProductBySellerId(user.Id);
+            var result = await _productService.GetAllProductBySellerId(userId);
             if (result.Success)
             {
                 Products = result.Data;
@@ -46,8 +52,6 @@ namespace MarketPlace.Web.Pages.Profile
                 Products = new List<ProductDto>();
                 TempData["ErrorMessage"] = result.Message ?? "Failed to load products.";
             }
-
         }
-
     }
 }

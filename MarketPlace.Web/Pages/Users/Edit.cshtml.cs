@@ -1,22 +1,20 @@
 using MarketPlace.Application.DTOs;
-using MarketPlace.Infrastructure.Entities;
+using MarketPlace.Application.Interfaces;
+using MarketPlace.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MarketPlace.Web.Pages.Users
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = UserRoles.Admin)]
     public class EditModel : PageModel
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IAuthService _authService;
 
-        public EditModel(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public EditModel(IAuthService authService)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
+            _authService = authService;
         }
 
         [BindProperty]
@@ -26,41 +24,56 @@ namespace MarketPlace.Web.Pages.Users
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return NotFound();
+            var result = await _authService.GetUserByIdAsync(id);
+            if (!result.IsSuccess) 
+            {
+                TempData["ErrorMessage"] = result.ErrorMessage;
+                return NotFound();
+            }
 
-            var roles = await _userManager.GetRolesAsync(user);
+            var user = result.Value;
 
             Input = new EditUserRequest
             {
                 Id = user.Id,
-                Email = user.Email!,
+                Email = user.Email,
                 DisplayName = user.DisplayName,
-                Role = roles.FirstOrDefault() ?? "User"
+                Role = user.Role
             };
 
-            AllRoles = _roleManager.Roles.Select(r => r.Name!).ToList();
+            AllRoles = UserRoles.GetAllRoles().ToList();
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await _userManager.FindByIdAsync(Input.Id);
-            if (user == null) return NotFound();
+            if (!ModelState.IsValid)
+            {
+                AllRoles = UserRoles.GetAllRoles().ToList();
+                return Page();
+            }
 
-            // update display name
-            user.DisplayName = Input.DisplayName;
-            await _userManager.UpdateAsync(user);
+            // Update display name
+            var updateResult = await _authService.UpdateUserAsync(Input.Id, Input.DisplayName);
+            if (!updateResult.IsSuccess)
+            {
+                TempData["ErrorMessage"] = updateResult.ErrorMessage;
+                AllRoles = UserRoles.GetAllRoles().ToList();
+                return Page();
+            }
 
-            // update role
-            var currentRoles = await _userManager.GetRolesAsync(user);
-            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            // Update role
+            var roleResult = await _authService.UpdateUserRoleAsync(Input.Id, Input.Role);
+            if (!roleResult.IsSuccess)
+            {
+                TempData["ErrorMessage"] = roleResult.ErrorMessage;
+                AllRoles = UserRoles.GetAllRoles().ToList();
+                return Page();
+            }
 
-            await _userManager.AddToRoleAsync(user, Input.Role);
-
+            TempData["SuccessMessage"] = "User updated successfully.";
             return RedirectToPage("/Users/Index");
         }
-
     }
 }

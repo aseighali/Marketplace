@@ -1,6 +1,7 @@
 ﻿using MarketPlace.Application.Common;
 using MarketPlace.Application.DTOs;
 using MarketPlace.Application.Interfaces;
+using MarketPlace.Domain.Interfaces;
 using MarketPlace.Domain.Entities;
 
 namespace MarketPlace.Application.Services

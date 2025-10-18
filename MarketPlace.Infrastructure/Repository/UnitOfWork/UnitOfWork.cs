@@ -1,4 +1,4 @@
-using MarketPlace.Application.Interfaces;
+using MarketPlace.Domain.Interfaces;
 using MarketPlace.Infrastructure.Data;
 
 namespace MarketPlace.Infrastructure.Repository.UnitOfWork

@@ -3,13 +3,14 @@ using MarketPlace.Application.DTOs;
 using MarketPlace.Application.Interfaces;
 using MarketPlace.Application.Services;
 using MarketPlace.Domain.Entities;
+using MarketPlace.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MarketPlace.Web.Pages.Categories
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = UserRoles.Admin)]
     public class IndexModel : PageModel
     {
         private readonly IProductCategoryService _categoryService;

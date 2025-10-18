@@ -1,4 +1,6 @@
 ﻿@using MarketPlace.Web.Services
+@using MarketPlace.Web.Extensions
+@using MarketPlace.Domain.Constants
 @inject CartService CartService
 
 <!DOCTYPE html>
@@ -25,15 +27,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-page="/Products/Index">Products</a>
                         </li>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Profile/Index">Profile</a>
-                            </li>
-                        }
 
 
-                        @if (User.IsInRole("Admin"))
+                        @if (User.GetUserRole() == UserRoles.Admin)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-page="/Categories/Index">Product Categories</a>
@@ -52,7 +48,30 @@
                             </a>
                         </li>
                     </ul>
-
+                    <ul class="navbar-nav">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                    @(User.GetDisplayName() ?? User.GetUserEmail() ?? "User")
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-page="/Profile/Index">Profile</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-page="/Auth/Logout">Logout</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Auth/Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Auth/Register">Register</a>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>

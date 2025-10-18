@@ -1,0 +1,51 @@
+@page
+@model MarketPlace.Web.Pages.Auth.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">Login</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="LoginRequest.Email" class="form-label">Email</label>
+                        <input asp-for="LoginRequest.Email" class="form-control" type="email" />
+                        <span asp-validation-for="LoginRequest.Email" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="LoginRequest.Password" class="form-label">Password</label>
+                        <input asp-for="LoginRequest.Password" class="form-control" type="password" />
+                        <span asp-validation-for="LoginRequest.Password" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input asp-for="RememberMe" class="form-check-input" type="checkbox" />
+                            <label asp-for="RememberMe" class="form-check-label">Remember me</label>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p>Don't have an account? <a asp-page="/Auth/Register">Register here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

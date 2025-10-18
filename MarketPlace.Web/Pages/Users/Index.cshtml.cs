@@ -1,40 +1,41 @@
 using MarketPlace.Application.DTOs;
-using MarketPlace.Infrastructure.Entities;
+using MarketPlace.Application.Interfaces;
+using MarketPlace.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MarketPlace.Web.Pages.Users
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = UserRoles.Admin)]
     public class UsersModel : PageModel
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IAuthService _authService;
 
         public List<UserDto> Users { get; set; } = new();
 
-        public UsersModel(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UsersModel(IAuthService authService)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
+            _authService = authService;
         }
 
         public async Task OnGetAsync()
         {
-            var users = _userManager.Users.ToList();
-            foreach (var user in users)
+            var result = await _authService.GetAllUsersAsync();
+            if (result.IsSuccess)
             {
-                var roles = await _userManager.GetRolesAsync(user);
-                Users.Add(new UserDto
+                Users = result.Value.Select(user => new UserDto
                 {
                     Id = user.Id,
-                    Email = user.Email!,
-                    Roles = string.Join(", ", roles)
-                });
+                    Email = user.Email,
+                    DisplayName = user.DisplayName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Role = user.Role,
+                    CreatedAt = user.CreatedAt,
+                    LastLoginAt = user.LastLoginAt,
+                    IsActive = user.IsActive
+                }).ToList();
             }
         }
-
     }
 }

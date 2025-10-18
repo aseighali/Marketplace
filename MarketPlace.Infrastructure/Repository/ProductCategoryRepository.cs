@@ -1,4 +1,4 @@
-﻿using MarketPlace.Application.Interfaces;
+﻿using MarketPlace.Domain.Interfaces;
 using MarketPlace.Domain.Entities;
 using MarketPlace.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;

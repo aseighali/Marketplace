@@ -1,7 +1,7 @@
 using MarketPlace.Application.DTOs;
-using MarketPlace.Infrastructure.Entities;
+using MarketPlace.Application.Interfaces;
+using MarketPlace.Web.Extensions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -10,24 +10,31 @@ namespace MarketPlace.Web.Pages.Profile
     [Authorize]
     public class EditModel : PageModel
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAuthService _authService;
 
         [BindProperty]
         public ProfileEditRequest Input { get; set; } = new();
 
-        public EditModel(UserManager<ApplicationUser> userManager)
+        public EditModel(IAuthService authService)
         {
-            _userManager = userManager;
+            _authService = authService;
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return NotFound();
+            var userId = User.GetUserId();
+            if (string.IsNullOrEmpty(userId)) return NotFound();
+
+            var result = await _authService.GetUserByIdAsync(userId);
+            if (!result.IsSuccess)
+            {
+                TempData["ErrorMessage"] = result.ErrorMessage;
+                return NotFound();
+            }
 
             Input = new ProfileEditRequest
             {
-                DisplayName = user.DisplayName
+                DisplayName = result.Value.DisplayName
             };
 
             return Page();
@@ -37,14 +44,18 @@ namespace MarketPlace.Web.Pages.Profile
         {
             if (!ModelState.IsValid) return Page();
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return NotFound();
+            var userId = User.GetUserId();
+            if (string.IsNullOrEmpty(userId)) return NotFound();
 
-            user.DisplayName = Input.DisplayName;
-            await _userManager.UpdateAsync(user);
+            var result = await _authService.UpdateUserAsync(userId, Input.DisplayName);
+            if (!result.IsSuccess)
+            {
+                TempData["ErrorMessage"] = result.ErrorMessage;
+                return Page();
+            }
 
+            TempData["SuccessMessage"] = "Profile updated successfully.";
             return RedirectToPage("Index");
         }
-
     }
 }

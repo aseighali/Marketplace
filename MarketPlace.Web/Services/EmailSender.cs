@@ -1,28 +1,12 @@
-﻿using MarketPlace.Infrastructure.Entities;
-using Microsoft.AspNetCore.Identity.UI.Services;
+﻿using MarketPlace.Application.Interfaces;
+
 namespace MarketPlace.Web.Services
 {
-
-    public class EmailSender : IEmailSender, Microsoft.AspNetCore.Identity.IEmailSender<ApplicationUser>
+    public class EmailSender : IEmailSender
     {
-        public Task SendConfirmationLinkAsync(ApplicationUser user, string email, string confirmationLink)
+        public Task SendEmailAsync(string email, string subject, string message)
         {
-            return Task.CompletedTask;
-        }
-
-        public Task SendEmailAsync(string email, string subject, string htmlMessage)
-        {
-            // For now, do nothing
-            return Task.CompletedTask;
-        }
-
-        public Task SendPasswordResetCodeAsync(ApplicationUser user, string email, string resetCode)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task SendPasswordResetLinkAsync(ApplicationUser user, string email, string resetLink)
-        {
+            // TODO: Implement actual email sending (SMTP, SendGrid, etc.)
             return Task.CompletedTask;
         }
     }
